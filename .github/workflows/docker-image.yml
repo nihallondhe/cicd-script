@@ -31,13 +31,13 @@ jobs:
 
       - name: Update Kubernetes Manifest
         run: |
-          sed -i 's|image: nihallondhe/nginx-k3s:.*|image: nihallondhe/nginx-k3s:latest|g' nginx-hello-world.yaml
+          sed -i 's|image: nihallondhe/nginx-k3s:.*|image: nihallondhe/nginx-k3s:latest|g' /home/ec2-user/nginx-hello-world.yaml
 
       - name: Apply Kubernetes Deployment
         run: |
-          kubectl apply -f nginx-hello-world.yaml
+          sudo kubectl apply -f /home/ec2-user/nginx-hello-world.yaml
 
       - name: Verify Deployment
         run: |
-          kubectl get pods
-          kubectl get svc hello-nginx-service
+          sudo kubectl get pods
+          sudo kubectl get svc hello-nginx-service
