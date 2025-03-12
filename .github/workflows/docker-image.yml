@@ -3,11 +3,11 @@ name: Deploy Hello World Nginx to k3s
 on:
   push:
     branches:
-      - main  # Change if using a different branch
+      - main  # Trigger on main branch push
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: self-hosted  # Run on your self-hosted k3s runner
 
     steps:
       - name: Checkout Code
@@ -25,8 +25,19 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t nihallondhe/nginx-k3s:latest .
-          docker push nihallondhe/nginx-k3s:latest
+          IMAGE_TAG="nihallondhe/nginx-k3s:latest"
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
 
-    
-     
+      - name: Update Kubernetes Manifest
+        run: |
+          sed -i 's|image: nihallondhe/nginx-k3s:.*|image: nihallondhe/nginx-k3s:latest|g' nginx-hello-world.yaml
+
+      - name: Apply Kubernetes Deployment
+        run: |
+          kubectl apply -f nginx-hello-world.yaml
+
+      - name: Verify Deployment
+        run: |
+          kubectl get pods
+          kubectl get svc hello-nginx-service
