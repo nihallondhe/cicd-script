@@ -33,10 +33,10 @@ jobs:
 
       - name: Update Kubernetes Manifest
         run: |
-          sed -i 's|image: nihallondhe/nginx-k3s:.*|image: '${IMAGE_TAG}'|g' nginx-hello-world.yaml
+          sed -i 's|image: nihallondhe/nginx-k3s:.*|image: '${IMAGE_TAG}'|g' //home/ec2-usernginx-hello-world.yaml
 
       - name: Apply Kubernetes Deployment
-        run: kubectl apply -f nginx-hello-world.yaml
+        run: kubectl apply -f /home/ec2-user/nginx-hello-world.yaml
 
       - name: Verify Deployment
         run: |
